@@ -1,0 +1,581 @@
+# ~/sky_vision/config/system_config.yaml
+/**:
+  ros__parameters:
+
+    # =========================================================
+    # DESIGN GOAL: KISS + DRY + SOLID
+    # Rule: YAML is the database of options.
+    # Use lightweight -p selectors at runtime.
+    # =========================================================
+
+    # =========================================================
+    # Runtime selectors
+    # =========================================================
+    orchard_id: "orchard_a"
+    mission_id: "orchard_a_row_01"
+    mission_frame: "lps"
+    task_type: "row_scan"
+    scan_profile_id: ""
+    target_tree_id: ""
+    target_object_id: ""
+    target_access_mode: ""
+
+    # =========================================================
+    # Network
+    # =========================================================
+    network:
+      mavlink_target_ip: "192.168.10.51"
+      stream_target_ip: "192.168.10.51"
+      stream_target_port: 5600
+      target_fps: 30.0
+
+    # =========================================================
+    # Single Drone
+    # =========================================================
+    drone:
+      drone_name: "drone_main"
+      px4_target_system: 0
+      enabled: true
+      supported_task_types:
+        - "row_scan"
+        - "tree_scan"
+        - "object_inspect_top"
+        - "object_inspect_side"
+        - "object_pick_approach_top"
+        - "object_pick_approach_side"
+
+    # =========================================================
+    # Flight Defaults
+    # =========================================================
+    flight_defaults:
+      mission_takeoff_height_m: -5.2
+      arrival_tolerance_m: 1.5
+      waypoint_pause_duration_s: 15.0
+      home_hover_time_s: 5.0
+      gimbal_pitch_down_deg: -90.0
+      gimbal_pitch_forward_deg: 0.0
+      gimbal_pitch_return_deg: 0.0
+
+    # =========================================================
+    # Vision
+    # =========================================================
+    vision:
+      yolo_model_path: "yolov8n.pt"
+      target_class_id: 47
+      target_class_name: "apple"
+      detection_confidence: 0.5
+      bbox_shape: "square"
+
+    # =========================================================
+    # Health Assessment
+    # =========================================================
+    health_assessment:
+      enabled: true
+      classifier_backend: "yolov8"
+      healthy_labels: ["healthy"]
+      unhealthy_labels: ["unhealthy", "damaged", "rotten", "diseased"]
+      unknown_labels: ["unknown"]
+      default_health_status: "unknown"
+
+    # =========================================================
+    # Size Estimation
+    # =========================================================
+    size_estimation:
+      enabled: true
+      method: "pinhole_bbox"
+      focal_length_px: 640.0
+      preferred_view_mode: "side"
+      min_confidence_for_size: 0.5
+      size_unit: "mm"
+
+    # =========================================================
+    # Automation Rules
+    # =========================================================
+    automation_rules:
+      auto_create_pick_task_for_unhealthy: true
+      auto_schedule_inspection_for_healthy: true
+      auto_skip_terminal_object_statuses: true
+      reinspection_interval_days_for_healthy: 7
+      reinspection_interval_days_for_unknown: 2
+      pick_priority_for_unhealthy: "high"
+
+    # =========================================================
+    # Object Lifecycle
+    # =========================================================
+    object_status:
+      initial_status: "new"
+      active_statuses:
+        - "new"
+        - "healthy_monitoring"
+        - "scheduled_inspect"
+        - "scheduled_pick"
+        - "inspect_in_progress"
+        - "pick_in_progress"
+      terminal_statuses:
+        - "picked"
+        - "missed"
+        - "removed"
+        - "inactive"
+
+    # =========================================================
+    # Task Dispatch Rules
+    # =========================================================
+    task_dispatch_rules:
+      skip_terminal_object_statuses: true
+      skip_if_picked: true
+      skip_if_missed: true
+      create_pick_task_for_unhealthy: true
+      create_inspect_task_for_healthy: true
+      allow_only_one_active_task_per_object: true
+      prefer_pick_over_inspect_for_unhealthy: true
+
+    # =========================================================
+    # Scan Profiles
+    # =========================================================
+    scan_profiles:
+      hover_top_scan:
+        view_mode: "top"
+        enabled_hover: true
+        hover_duration_s: 15.0
+        hover_gimbal_pitch_deg: -90.0
+        enabled_orbit: false
+
+      orbit_side_scan:
+        view_mode: "side"
+        enabled_hover: false
+        enabled_orbit: true
+        orbit_radius_m: 4.0
+        orbit_altitude_m: -3.5
+        orbit_points: 8
+        orbit_gimbal_pitch_deg: -35.0
+        orbit_yaw_mode: "face_plant_center"
+
+      hover_then_orbit_scan:
+        view_sequence: ["top", "side"]
+        enabled_hover: true
+        hover_duration_s: 10.0
+        hover_gimbal_pitch_deg: -90.0
+        enabled_orbit: true
+        orbit_radius_m: 4.0
+        orbit_altitude_m: -3.5
+        orbit_points: 8
+        orbit_gimbal_pitch_deg: -35.0
+        orbit_yaw_mode: "face_plant_center"
+
+    # =========================================================
+    # Task Defaults
+    # =========================================================
+    task_defaults:
+      row_scan:
+        requires_mission_id: true
+        requires_target_tree_id: false
+        requires_target_object_id: false
+        use_saved_object_pose: false
+
+      tree_scan:
+        requires_mission_id: false
+        requires_target_tree_id: true
+        requires_target_object_id: false
+        use_saved_object_pose: false
+
+      object_inspect_top:
+        requires_mission_id: false
+        requires_target_tree_id: false
+        requires_target_object_id: true
+        use_saved_object_pose: true
+        access_mode: "top"
+        action_pose_key: "inspect_pose_top"
+
+      object_inspect_side:
+        requires_mission_id: false
+        requires_target_tree_id: false
+        requires_target_object_id: true
+        use_saved_object_pose: true
+        access_mode: "side"
+        action_pose_key: "inspect_pose_side"
+
+      object_pick_approach_top:
+        requires_mission_id: false
+        requires_target_tree_id: false
+        requires_target_object_id: true
+        use_saved_object_pose: true
+        access_mode: "top"
+        action_pose_key: "pick_pose_top"
+
+      object_pick_approach_side:
+        requires_mission_id: false
+        requires_target_tree_id: false
+        requires_target_object_id: true
+        use_saved_object_pose: true
+        access_mode: "side"
+        action_pose_key: "pick_pose_side"
+
+    # =========================================================
+    # Action Pose Defaults
+    # =========================================================
+    object_action_defaults:
+      inspect_pose_top:
+        access_mode: "top"
+        standoff_distance_m: 1.5
+        vertical_offset_m: 0.3
+        preferred_gimbal_pitch_deg: -90.0
+        face_target: true
+        safety_margin_m: 0.5
+
+      inspect_pose_side:
+        access_mode: "side"
+        standoff_distance_m: 1.5
+        vertical_offset_m: 0.0
+        preferred_gimbal_pitch_deg: -20.0
+        face_target: true
+        safety_margin_m: 0.5
+
+      pick_pose_top:
+        access_mode: "top"
+        standoff_distance_m: 0.8
+        vertical_offset_m: 0.2
+        preferred_gimbal_pitch_deg: -90.0
+        face_target: true
+        safety_margin_m: 0.3
+
+      pick_pose_side:
+        access_mode: "side"
+        standoff_distance_m: 0.8
+        vertical_offset_m: 0.0
+        preferred_gimbal_pitch_deg: -10.0
+        face_target: true
+        safety_margin_m: 0.3
+
+    # =========================================================
+    # Manipulator (Picking Tool) - Optional
+    # Set enabled: false if no physical tool is attached.
+    # All other task logic runs normally.
+    # =========================================================
+    manipulator:
+      enabled: false
+      tool_type: "gripper"
+      driver_backend: "ros_topic"
+      open_action: "/sky_vision/gripper/open"
+      close_action: "/sky_vision/gripper/close"
+      home_action: "/sky_vision/gripper/home"
+      grasp_timeout_s: 5.0
+      post_pick_hold_s: 2.0
+
+    # =========================================================
+    # Pick Execution
+    # =========================================================
+    pick_execution:
+      allow_approach_without_tool: true
+      final_align_tolerance_m: 0.1
+      approach_speed_mps: 0.3
+      retreat_distance_m: 1.0
+      verification_mode: "vision"
+      mark_outcome_without_tool: "tool_unavailable"
+
+    # =========================================================
+    # Pick Outcomes
+    # =========================================================
+    pick_outcomes:
+      success: "picked"
+      missed: "missed"
+      tool_unavailable: "tool_unavailable"
+      aborted: "aborted"
+      simulation_only: "simulation_only"
+
+    # =========================================================
+    # Scheduler - Single Drone
+    # =========================================================
+    scheduler:
+      enabled: true
+      mode: "single_drone_serial"
+      allow_parallel_tasks: false
+      one_object_one_active_task: true
+      auto_remove_terminal_objects_from_queue: true
+
+    # =========================================================
+    # Database
+    # =========================================================
+    database:
+      engine: "sqlite3"
+      db_path: "~/sky_vision/data/mission_data.db"
+      tables:
+        orchards: "orchards"
+        plants: "plants"
+        tracked_objects: "tracked_objects"
+        detection_events: "detection_events"
+        size_measurements: "size_measurements"
+        action_poses: "action_poses"
+        task_events: "task_events"
+      unique_entity_policy:
+        prevent_duplicate_objects: true
+        identity_match_fields:
+          - "orchard_id"
+          - "row_id"
+          - "plant_id"
+          - "class_name"
+        max_orchard_lps_distance_m: 0.20
+        max_plant_relative_distance_m: 0.20
+      history_policy:
+        keep_every_detection_event: true
+        keep_first_seen_at: true
+        keep_last_seen_at: true
+        keep_terminal_outcomes: true
+      event_policy:
+        save_scan_events: true
+        save_inspect_events: true
+        save_pick_attempt_events: true
+        save_pick_success_events: true
+        save_pick_missed_events: true
+      size_tracking_policy:
+        enabled: true
+        store_per_event: true
+        compare_over_time: true
+
+    # =========================================================
+    # Detection Output Policy
+    # =========================================================
+    detection_output:
+      store_orchard_id: true
+      store_row_id: true
+      store_plant_id: true
+      store_object_id: true
+      store_health_status: true
+      store_object_status: true
+      store_view_mode: true
+      store_task_type: true
+      store_bbox_px: true
+      store_orchard_lps_xyz: true
+      store_plant_relative_xyz: true
+      store_gps: true
+      store_distance_from_lens: true
+      store_confidence: true
+      store_estimated_size_mm: true
+      store_action_poses: true
+
+    # =========================================================
+    # DB Entity Field Blueprints (declarative intent only)
+    # =========================================================
+    db_entity_blueprints:
+      tracked_object:
+        required_fields:
+          - "object_id"
+          - "object_name"
+          - "class_id"
+          - "class_name"
+          - "orchard_id"
+          - "row_id"
+          - "plant_id"
+          - "plant_name"
+          - "health_status"
+          - "object_status"
+          - "orchard_lps_x_m"
+          - "orchard_lps_y_m"
+          - "orchard_lps_z_m"
+          - "plant_relative_x_m"
+          - "plant_relative_y_m"
+          - "plant_relative_z_m"
+          - "latitude"
+          - "longitude"
+          - "altitude_m"
+          - "preferred_access_mode"
+          - "first_seen_at"
+          - "last_seen_at"
+          - "picked_at"
+          - "missed_at"
+
+      action_pose:
+        required_fields:
+          - "object_id"
+          - "inspect_pose_top_x_m"
+          - "inspect_pose_top_y_m"
+          - "inspect_pose_top_z_m"
+          - "inspect_pose_side_x_m"
+          - "inspect_pose_side_y_m"
+          - "inspect_pose_side_z_m"
+          - "pick_pose_top_x_m"
+          - "pick_pose_top_y_m"
+          - "pick_pose_top_z_m"
+          - "pick_pose_side_x_m"
+          - "pick_pose_side_y_m"
+          - "pick_pose_side_z_m"
+
+      detection_event:
+        required_fields:
+          - "object_id"
+          - "event_timestamp"
+          - "task_type"
+          - "scan_profile_id"
+          - "view_mode"
+          - "bbox_x1_px"
+          - "bbox_y1_px"
+          - "bbox_x2_px"
+          - "bbox_y2_px"
+          - "image_width_px"
+          - "image_height_px"
+          - "distance_from_lens_m"
+          - "confidence"
+          - "health_status"
+          - "estimated_size_mm"
+          - "latitude"
+          - "longitude"
+          - "altitude_m"
+          - "orchard_lps_x_m"
+          - "orchard_lps_y_m"
+          - "orchard_lps_z_m"
+          - "plant_relative_x_m"
+          - "plant_relative_y_m"
+          - "plant_relative_z_m"
+
+      size_measurement:
+        required_fields:
+          - "object_id"
+          - "measurement_timestamp"
+          - "estimated_size_mm"
+          - "size_method"
+          - "confidence"
+          - "source_event_id"
+
+      task_event:
+        required_fields:
+          - "object_id"
+          - "task_timestamp"
+          - "task_type"
+          - "task_status"
+          - "outcome"
+          - "notes"
+
+    # =========================================================
+    # Naming Rules
+    # =========================================================
+    naming:
+      plant_id_pattern: "{orchard_id}_{row_id}_plant_{plant_index:02d}"
+      plant_name_pattern: "{crop_type}_{row_id}_plant_{plant_index:02d}"
+      object_id_pattern: "{plant_id}_object_{object_index:03d}"
+      object_name_pattern: "{object_label}_{row_id}_plant_{plant_index:02d}_object_{object_index:03d}"
+
+    # =========================================================
+    # Orchards
+    # =========================================================
+    orchards:
+      orchard_a:
+        orchard_name: "main_orchard"
+        crop_type: "apple"
+        object_label: "apple"
+        # boundary_gps:
+        #   - [59.36837161278662, 10.446564239460168]
+        #   - [59.369243505279044, 10.446145922881874]
+        #   - [59.36918314562669, 10.444832177791753]
+        #   - [59.368311167040304, 10.44524980426896]
+        defaults:
+          plant_type: "apple_tree"
+          plant_count_per_row: 10
+          plant_center_z_m: 0.0
+          canopy_radius_m: 2.0
+          default_scan_profile_id: "hover_then_orbit_scan"
+          row_axis_mode: "x_fixed_y_list"
+        rows:
+          row_01:
+            row_index: 1
+            x_m: -25.0
+            plant_y_values_m: [-45.0, -35.0, -25.0, -15.0, -5.0, 5.0, 15.0, 25.0, 35.0, 45.0]
+          row_02:
+            row_index: 2
+            x_m: -15.0
+            plant_y_values_m: [-45.0, -35.0, -25.0, -15.0, -5.0, 5.0, 15.0, 25.0, 35.0, 45.0]
+          row_03:
+            row_index: 3
+            x_m: -5.0
+            plant_y_values_m: [-45.0, -35.0, -25.0, -15.0, -5.0, 5.0, 15.0, 25.0, 35.0, 45.0]
+          row_04:
+            row_index: 4
+            x_m: 5.0
+            plant_y_values_m: [-45.0, -35.0, -25.0, -15.0, -5.0, 5.0, 15.0, 25.0, 35.0, 45.0]
+          row_05:
+            row_index: 5
+            x_m: 15.0
+            plant_y_values_m: [-45.0, -35.0, -25.0, -15.0, -5.0, 5.0, 15.0, 25.0, 35.0, 45.0]
+          row_06:
+            row_index: 6
+            x_m: 25.0
+            plant_y_values_m: [-45.0, -35.0, -25.0, -15.0, -5.0, 5.0, 15.0, 25.0, 35.0, 45.0]
+
+      orchard_b:
+        orchard_name: "secondary_orchard"
+        crop_type: "orange"
+        object_label: "orange"
+        boundary_gps: []
+        defaults:
+          plant_type: "orange_tree"
+          plant_count_per_row: 7
+          plant_center_z_m: 0.0
+          canopy_radius_m: 2.5
+          default_scan_profile_id: "hover_top_scan"
+          row_axis_mode: "x_fixed_y_list"
+        rows:
+          row_01:
+            row_index: 1
+            x_m: -30.0
+            plant_y_values_m: [-30.0, -20.0, -10.0, 0.0, 10.0, 20.0, 30.0]
+          row_02:
+            row_index: 2
+            x_m: -20.0
+            plant_y_values_m: [-30.0, -20.0, -10.0, 0.0, 10.0, 20.0, 30.0]
+          row_03:
+            row_index: 3
+            x_m: -10.0
+            plant_y_values_m: [-30.0, -20.0, -10.0, 0.0, 10.0, 20.0, 30.0]
+
+    # =========================================================
+    # Missions
+    # =========================================================
+    missions:
+      orchard_a_row_01:
+        orchard_id: "orchard_a"
+        row_ids: ["row_01"]
+        default_scan_profile_id: "hover_then_orbit_scan"
+      orchard_a_row_02:
+        orchard_id: "orchard_a"
+        row_ids: ["row_02"]
+        default_scan_profile_id: "hover_then_orbit_scan"
+      orchard_a_row_03:
+        orchard_id: "orchard_a"
+        row_ids: ["row_03"]
+        default_scan_profile_id: "hover_then_orbit_scan"
+      orchard_a_row_04:
+        orchard_id: "orchard_a"
+        row_ids: ["row_04"]
+        default_scan_profile_id: "hover_then_orbit_scan"
+      orchard_a_row_05:
+        orchard_id: "orchard_a"
+        row_ids: ["row_05"]
+        default_scan_profile_id: "hover_then_orbit_scan"
+      orchard_a_row_06:
+        orchard_id: "orchard_a"
+        row_ids: ["row_06"]
+        default_scan_profile_id: "hover_then_orbit_scan"
+      orchard_a_all_rows:
+        orchard_id: "orchard_a"
+        row_ids: ["row_01","row_02","row_03","row_04","row_05","row_06"]
+        default_scan_profile_id: "hover_then_orbit_scan"
+      orchard_b_all_rows:
+        orchard_id: "orchard_b"
+        row_ids: ["row_01","row_02","row_03"]
+        default_scan_profile_id: "hover_top_scan"
+
+    # =========================================================
+    # Example ROS 2 Commands
+    # =========================================================
+    # Row scan:
+    # ros2 run sky_vision_ros offboard_control \
+    #   --ros-args --params-file ~/sky_vision/config/system_config.yaml \
+    #   -p orchard_id:=orchard_a -p mission_id:=orchard_a_row_01 -p task_type:=row_scan
+    #
+    # Inspect top:
+    # ros2 run sky_vision_ros offboard_control \
+    #   --ros-args --params-file ~/sky_vision/config/system_config.yaml \
+    #   -p task_type:=object_inspect_top -p target_object_id:=orchard_a_row_01_plant_01_object_001
+    #
+    # Pick approach side:
+    # ros2 run sky_vision_ros offboard_control \
+    #   --ros-args --params-file ~/sky_vision/config/system_config.yaml \
+    #   -p task_type:=object_pick_approach_side -p target_object_id:=orchard_a_row_01_plant_01_object_001
