@@ -141,4 +141,9 @@ mv ~/sky_vision/env.sh ~/sky_vision/scripts/
 cd ~/sky_vision/scripts
 chmod +x run_px4_sim.sh
 
-# Test
+# PS: sdf verden for apple orchard må ligge i ~/PX4-Autopilot/Tools/simulation/gz/worlds for at PX4 skal kunne finne den
+# PS: Må også legge export GZ_SIM_RESOURCE_PATH=~/sky_vision/models:$GZ_SIM_RESOURCE_PATH inni env.sh for at PX4 skal kunne vite hvor path til modellene er
+# Test:
+./run_px4_sim.sh
+# Denne komandoen skal kunne åpne valgt gazebo world med modellene, DDS-agent, listener node og kamera bridge (4 terminaler)
+
