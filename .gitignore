@@ -9,3 +9,25 @@ wheels/
 
 # Virtual environments
 .venv
+
+# ROS2 / colcon workspace
+build/
+install/
+log/
+devel/
+
+# VS Code
+.vscode/
+!.vscode/settings.json  # Optional: keep workspace settings
+
+# OS / Editor
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# Logs (beyond your *.db)
+*.log
+
+# uv (Python tool)
+uv.lock  # If not committing lockfile
