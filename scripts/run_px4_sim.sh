@@ -1,8 +1,8 @@
-# ~/sky_vision/scripts/run_px4_sim.sh
+# ~/sky_vision/scripts/run_px4_simulation.sh
 
 # you need to make the script executable by running
-# chmod +x ~/sky_vision/scripts/run_px4_sim.sh
-# ~/sky_vision/scripts/run_px4_sim.sh
+# chmod +x ~/sky_vision/scripts/run_px4_simulation.sh
+# ~/sky_vision/scripts/run_px4_simulation.sh
 #!/bin/bash
 
 # ==========================================
@@ -72,7 +72,7 @@ MAVLINK_IP=\$(grep 'mavlink_target_ip:' \$CONFIG_FILE | cut -d '#' -f 1 | awk -F
 PX4_SYS_AUTOSTART=4019 \\
 PX4_GZ_MODEL_POSE=\"0,0\" \\
 PX4_GZ_MODEL=x500_gimbal \\
-PX4_GZ_WORLD=apple_orchard_100x75_grasspatch_no_collision_v3 \\
+PX4_GZ_WORLD=apple_orchard \\
 ./build/px4_sitl_default/bin/px4 -i \$TARGET_SYS << EOF
 
 mavlink stop-all
