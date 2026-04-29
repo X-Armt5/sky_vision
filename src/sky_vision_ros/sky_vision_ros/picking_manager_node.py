@@ -13,9 +13,9 @@ import rclpy, json, time
 from rclpy.node   import Node
 from std_msgs.msg import String
 
-from sky_vision_ros.sky_vision_ros.config_utils import load_yaml
-from sky_vision_ros.sky_vision_ros.pick_utils   import PickStateMachine, is_tool_enabled
-from sky_vision_ros.sky_vision_ros.db_utils     import insert_task_event, update_object_status
+from sky_vision_ros.config_utils import load_yaml
+from sky_vision_ros.pick_utils   import PickStateMachine, is_tool_enabled
+from sky_vision_ros.db_utils     import insert_task_event, update_object_status
 
 
 class PickingManagerNode(Node):

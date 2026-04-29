@@ -10,8 +10,8 @@ from rclpy.node      import Node
 from sensor_msgs.msg import Image
 from cv_bridge       import CvBridge
 
-from sky_vision_ros.sky_vision_ros.ros_utils          import discover_px4_topics
-from sky_vision_ros.sky_vision_ros.video_stream_utils import build_gstreamer_pipeline, open_video_writer
+from sky_vision_ros.ros_utils          import discover_px4_topics
+from sky_vision_ros.video_stream_utils import build_gstreamer_pipeline, open_video_writer
 
 
 class QGCVideoStreamerNode(Node):
@@ -20,7 +20,7 @@ class QGCVideoStreamerNode(Node):
         super().__init__('qgc_video_streamer_node')
 
         # QGC defaults: port 5600, same IP key as system_config.yaml
-        self.declare_parameter('stream_target_ip',   '192.168.10.51')
+        self.declare_parameter('stream_target_ip',   '192.168.11.32')
         self.declare_parameter('stream_target_port', 5600)
         self.declare_parameter('target_fps',         30.0)
 

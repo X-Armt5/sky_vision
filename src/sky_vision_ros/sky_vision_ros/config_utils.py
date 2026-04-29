@@ -6,7 +6,7 @@ Used by: offboard_control_node, database_logger_node, picking_manager_node.
 """
 import yaml
 import os
-from sky_vision_ros.sky_vision_ros.geometry_utils import gazebo_to_px4_ned
+from sky_vision_ros.geometry_utils import gazebo_to_px4_ned
 
 
 def load_yaml(yaml_path: str) -> dict:

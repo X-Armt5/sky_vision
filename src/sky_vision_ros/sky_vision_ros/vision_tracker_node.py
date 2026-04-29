@@ -20,13 +20,13 @@ from cv_bridge       import CvBridge
 import cv2
 from ultralytics import YOLO
 
-from sky_vision_ros.sky_vision_ros.ros_utils            import discover_px4_topics
-from sky_vision_ros.sky_vision_ros.geometry_utils       import (ned_to_gps, get_euler_from_quaternion,
+from sky_vision_ros.ros_utils            import discover_px4_topics
+from sky_vision_ros.geometry_utils       import (ned_to_gps, get_euler_from_quaternion,
                                                   calculate_ground_intersection)
-from sky_vision_ros.sky_vision_ros.config_utils         import load_yaml
-from sky_vision_ros.sky_vision_ros.detection_utils      import (extract_bbox, map_health_label,
+from sky_vision_ros.config_utils         import load_yaml
+from sky_vision_ros.detection_utils      import (extract_bbox, map_health_label,
                                                   build_detection_payload)
-from sky_vision_ros.sky_vision_ros.size_estimation_utils import estimate_size_mm
+from sky_vision_ros.size_estimation_utils import estimate_size_mm
 
 
 class VisionTrackerNode(Node):

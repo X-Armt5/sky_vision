@@ -18,11 +18,11 @@ exec bash" &
 sleep 1
 
 # 2. Vision Tracker
-gnome-terminal --title="Vision Tracker" -- bash -c "
-source $HOME/sky_vision/scripts/env.sh
-ros2 run sky_vision_ros vision_tracker --ros-args --params-file $CONFIG
-exec bash" &
-sleep 1
+#gnome-terminal --title="Vision Tracker" -- bash -c "
+#source $HOME/sky_vision/scripts/env.sh
+#ros2 run sky_vision_ros vision_tracker --ros-args --params-file $CONFIG
+#exec bash" &
+#sleep 1
 
 # 3. QGC Video Streamer
 gnome-terminal --title="QGC Streamer" -- bash -c "
@@ -32,11 +32,11 @@ exec bash" &
 sleep 1
 
 # 4. Picking Manager
-gnome-terminal --title="Picking Manager" -- bash -c "
-source $HOME/sky_vision/scripts/env.sh
-ros2 run sky_vision_ros picking_manager --ros-args --params-file $CONFIG
-exec bash" &
-sleep 1
+# gnome-terminal --title="Picking Manager" -- bash -c "
+# source $HOME/sky_vision/scripts/env.sh
+# ros2 run sky_vision_ros picking_manager --ros-args --params-file $CONFIG
+# exec bash" &
+# sleep 1
 
 # 5. Offboard Flight Controller
 # Override mission at launch with: -p mission_id:=orchard_a_row_03 -p task_type:=row_scan

@@ -18,9 +18,9 @@ from px4_msgs.msg import (OffboardControlMode, TrajectorySetpoint,
                            VehicleCommand, VehicleLocalPosition, VehicleStatus)
 from std_msgs.msg import String
 
-from sky_vision_ros.sky_vision_ros.ros_utils     import discover_px4_topics
-from sky_vision_ros.sky_vision_ros.config_utils  import load_yaml, resolve_mission_waypoints, get_takeoff_height 
-from sky_vision_ros.sky_vision_ros.geometry_utils import euclidean_distance_3d
+from sky_vision_ros.ros_utils     import discover_px4_topics
+from sky_vision_ros.config_utils  import load_yaml, resolve_mission_waypoints, get_takeoff_height 
+from sky_vision_ros.geometry_utils import euclidean_distance_3d
 
 
 class OffboardControlNode(Node):

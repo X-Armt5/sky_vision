@@ -15,16 +15,16 @@ import rclpy, json
 from rclpy.node import Node
 from std_msgs.msg import String
 
-from sky_vision_ros.sky_vision_ros.config_utils  import load_yaml, get_terminal_statuses
-from sky_vision_ros.sky_vision_ros.db_utils      import (init_schema, find_duplicate_object_id,
+from sky_vision_ros.config_utils  import load_yaml, get_terminal_statuses
+from sky_vision_ros.db_utils      import (init_schema, find_duplicate_object_id,
                                            upsert_tracked_object, insert_detection_event,
                                            insert_size_measurement, insert_task_event,
                                            update_object_status, get_object_status,
                                            upsert_action_poses)
-from sky_vision_ros.sky_vision_ros.entity_utils  import build_object_id
-from sky_vision_ros.sky_vision_ros.task_utils    import should_skip_object, resolve_next_task_type
-from sky_vision_ros.sky_vision_ros.size_estimation_utils import size_is_reliable
-from sky_vision_ros.sky_vision_ros.geometry_utils import compute_action_pose
+from sky_vision_ros.entity_utils  import build_object_id
+from sky_vision_ros.task_utils    import should_skip_object, resolve_next_task_type
+from sky_vision_ros.size_estimation_utils import size_is_reliable
+from sky_vision_ros.geometry_utils import compute_action_pose
 
 
 class DatabaseLoggerNode(Node):

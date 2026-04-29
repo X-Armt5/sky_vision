@@ -1,28 +1,4 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-u# ~/sky_vision/src/sky_vision_ros/sky_vision_ros/ros_utils.py
+# ~/sky_vision/src/sky_vision_ros/sky_vision_ros/ros_utils.py
 """
 ros_utils.py
 Shared ROS 2 topic discovery for PX4 autopilot, camera, and sensor topics.
