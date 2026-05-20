@@ -41,7 +41,7 @@ source ~/sky_vision/.venv/bin/activate
 cd ~/sky_vision
 
 source .venv/bin/activate
-# eller
+# OR
 source ~/sky_vision/.venv/bin/activate
 
 uv run python build/sky_vision_ros/sky_vision_ros/vision_tracker_node.py
