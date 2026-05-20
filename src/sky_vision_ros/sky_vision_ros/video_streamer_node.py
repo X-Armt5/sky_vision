@@ -20,7 +20,7 @@ class VideoStreamerNode(Node):
     def __init__(self):
         super().__init__('video_streamer_node')
 
-        self.declare_parameter('stream_target_ip',   '192.168.11.32')
+        self.declare_parameter('stream_target_ip', '127.0.0.1')   #('192.168.11.32')
         self.declare_parameter('stream_target_port', 5600)
         self.declare_parameter('target_fps',         30.0)
 

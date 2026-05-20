@@ -32,8 +32,16 @@ uv run python -c 'import rclpy; from cv_bridge import CvBridge; from ultralytics
 
 If that prints the success message without throwing a numpy-related error, we are completely ready to write our YOLO Apple Detection node!
 
-# To run vision_tracker_node.py, needs to be inside the venv
+# To run vision_tracker_node.py, needs to be inside the virtual environment
 source ~/sky_vision/.venv/bin/activate
 
 ## NOT IMPORTANT
 # source /home/ubuntu/ardupilot_drone/src/ardupilot/Tools/completion/completion.bash
+
+cd ~/sky_vision
+
+source .venv/bin/activate
+# eller
+source ~/sky_vision/.venv/bin/activate
+
+uv run python build/sky_vision_ros/sky_vision_ros/vision_tracker_node.py

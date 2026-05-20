@@ -25,7 +25,7 @@
     # =========================================================
     network:
       mavlink_target_ip: "192.168.11.32"
-      stream_target_ip: "192.168.11.32" #"127.0.0.1"
+      stream_target_ip: "192.168.11.32"
       stream_target_port: 5600
       target_fps: 30.0
 

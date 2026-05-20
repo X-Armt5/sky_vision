@@ -20,7 +20,7 @@ class QGCVideoStreamerNode(Node):
         super().__init__('qgc_video_streamer_node')
 
         # QGC defaults: port 5600, same IP key as system_config.yaml
-        self.declare_parameter('stream_target_ip',   '192.168.11.32')
+        self.declare_parameter('stream_target_ip', "192.168.11.32")
         self.declare_parameter('stream_target_port', 5600)
         self.declare_parameter('target_fps',         30.0)
 
